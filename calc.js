@@ -4,7 +4,7 @@ let btn = document.querySelectorAll('.btn');
 let evalexpression = '';
 for( let item of btn){
     item.addEventListener('click',(e)=>{
-        let btntext = e.target.innerText;
+        let btntext = e.target.dataset.value || e.target.innerText;
         
         if (btntext === '×') {
             screen.value += '×';           // show × on screen
@@ -23,9 +23,11 @@ for( let item of btn){
                 evalexpression = '';
             }
         } 
-        else if (btntext === 'CE' || btntext === 'AC') {
+        else if (btntext === 'AC') {
             screen.value = '';
             evalexpression = '';
+        }else if(btntext === 'CE'){
+            backspc();
         } 
         else if (btntext === 'sin') {
             screen.value = Math.sin(eval(evalexpression));
@@ -52,20 +54,46 @@ for( let item of btn){
             evalexpression+='3.14159265359';
         }
         else if(btntext === 'log'){
+            
             screen.value = Math.log(eval(evalexpression));
             evalexpression =screen.value;
         }
-        else if(btntext === 'xy'){
-            xy();
+        else if(btntext == 'xy'){
+            screen.value = eval(evalexpression) + '**';
+            evalexpression = screen.value;
+            
         }
-        else if(btntext === 'x!'){
-            xfact();
+        
+        else if(btntext == 'x!'){
+            let n = eval(evalexpression);
+            if(n<0) {
+                screen.value = "Error";
+                return;
+            }
+            screen.value = xfact(n);
+            evalexpression = screen.value;
         }
+        
         else {
             screen.value += btntext;
             evalexpression += btntext;
         }
+
     });
+}
+
+function xfact(n){
+    
+    let fact = 1;
+    for(let i=2; i<=n; i++){
+        fact = fact*i;
+    }
+    return fact;
+}
+
+function backspc() {
+    screen.value = screen.value.substr(0, screen.value.length - 1);
+    evalexpression = screen.value;
 }
 
 
